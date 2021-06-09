@@ -18,7 +18,8 @@ a5 = 3.3 + 5.1j # Este es un número complejo (complex)
 
 print(a1, a2, a3, a4, a5)
 
-# Quiero escribir por pantalla: El valor de la variable a1 es <aquí va el valor de a1> y el valor de a2 es <aquí va el valor de a2>
+# Quiero escribir por pantalla: El valor de la variable a1 es <aquí va el valor de a1> 
+# y el valor de a2 es <aquí va el valor de a2>
 # Ej: El valor de la variable a1 es 10 y el valor de la variable a2 es 15.3
 # Formas de hacer esto
 print("El valor de la variable a1 es", a1, "y el valor de la variable a2 es", a2)
@@ -51,7 +52,7 @@ print("El elemento en la posición índice 2 de la tupla1 es", tupla1[1])
 print("Los 3 primeros elementos de la tupla1 son:", tupla1[0:3])
 
 # Diccionarios: tipo de dato compuesto cuyo acceso se puede dar con índices de distinto tipo
-# Requisito para los índices: debe ser INMUTABLE
+# Requisito para los índices: deben ser INMUTABLES
 dict1 = {
     0: "Texto para indice 0",
     "key1": "Texto para la llave key1",
@@ -78,7 +79,7 @@ lista_tupla2 = list(tupla2)
 print("La variable lista_tupla2 es ", lista_tupla2)
 
 r = "hola"
-# Se me olvidó de que tipo de dato era la variable r. ¿Cómo puede saberlo ahora?
+# Se me olvidó de que tipo de dato era la variable r. ¿Cómo puedo saberlo ahora?
 print("El tipo de la variable r es", type(r))
 
 # ¿Cómo saber cuál es el largo de la lista_tupla2?

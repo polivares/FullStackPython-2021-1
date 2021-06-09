@@ -12,6 +12,7 @@ class Curso:
         self.lista_curso.pop()
 
     def showCurso(self):
+        print("Imprimiendo curso:...")
         for i in self.lista_curso:
             print("Nombre estudiante:", i.getName(), "Edad:", i.getAge())
 
@@ -41,6 +42,15 @@ fullStackPython.addStudent(std2)
 
 # Mostramos el curso por pantalla
 fullStackPython.showCurso()
+
+# Crear un nuevo curso
+webFundamentals = Curso()
+# El estudiante std1 pertenece tanto a webFunamentals como a fullStackPython
+webFundamentals.addStudent(std1)
+# Como no hemos agregado el estudiante std2 a webFundamentals, este solo está asociado al curso de fullStackPython
+webFundamentals.showCurso()
+
+
 
 
 
