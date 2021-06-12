@@ -11,8 +11,6 @@ def register():
         id = 1
     else:
         id = grupos[-1].id + 1
-    x=1
-    y=2
     return render_template("register.html", id=id)
 
 
