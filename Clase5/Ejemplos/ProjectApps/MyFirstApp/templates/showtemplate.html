@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/showtemplate.css' %}">
+    <title>Mostrar grupo</title>
+</head>
+<body>
+    <h1>Grupo</h1>
+    <ul>
+        <li>Id del grupo: {{id_grupo}}</li>
+        <li>Título del proyecto: {{titulo_proyecto}}</li>
+    </ul>
+    <h3>Integrantes</h3>
+    <ul class="integrantes">
+        {% for i in integrantes %}
+            <li>{{i}}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
