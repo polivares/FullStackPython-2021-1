@@ -5,6 +5,8 @@ Instalación probada sobre entorno Ubuntu 20.04, python 3.8.8 y Django 3.2.4
 
 La estructura de esta guía se presenta a continuación:
 
+<div id="indice" />
+
 **Índice**
 1. [Creación de un entorno virtual](#paso1)
 2. [Instalación de Django sobre entorno virtual](#paso2)
@@ -20,6 +22,7 @@ La estructura de esta guía se presenta a continuación:
 12. [GET y POST request](#paso12)
 13. [Redireccionamiento](#paso13)
 14. [Sesiones](#paso14)
+
 
 <div id='paso1' />
 
@@ -45,6 +48,8 @@ $ source DjangoVenv/bin/activate
 (DjangoVenv) $ 
 ```
 
+[Volver al índice](#indice)
+
 <div id='paso2' />
 
 ## 2. Instalación de Django sobre entorno virtual
@@ -52,6 +57,8 @@ $ source DjangoVenv/bin/activate
 ```bash
 (DjangoVenv)$ pip install Django
 ```
+
+[Volver al índice](#indice)
 
 <div id='paso3' />
 
@@ -84,6 +91,8 @@ Quit the server with CONTROL-C.
 Ingresamos a la url http://127.0.0.1:8000/ indicada para verificar el correcto funcionamiento del servidor
 
 ![](images/1-runserver.png)
+
+[Volver al índice](#indice)
 
 <div id='paso4' />
 
@@ -120,6 +129,8 @@ MyEnterprise/
 *Ref: Explicación basada en los sitios web https://developer.mozilla.org/es/docs/Learn/Server-side/Django/skeleton_website y https://www.askpython.com/django/django-app-structure-project-structure*
 
 
+[Volver al índice](#indice)
+
 <div id='paso5' />
 
 ## 5. Migración inicial
@@ -150,6 +161,8 @@ Running migrations:
   Applying auth.0012_alter_user_first_name_max_length... OK
   Applying sessions.0001_initial... OK
 ```
+
+[Volver al índice](#indice)
 
 <div id='paso6' />
 
@@ -198,6 +211,8 @@ Ejecutamos nuevamente nuestro servidor para verificar que la nueva vista ha sido
 
 ![](images/2-view.png)
 
+[Volver al índice](#indice)
+
 <div id='paso7' />
 
 ## 7. Creación de aplicaciones
@@ -230,6 +245,7 @@ INSTALLED_APPS = [
 
 ```
 
+[Volver al índice](#indice)
 
 <div id='paso8' />
 
@@ -271,6 +287,8 @@ MyEnterprise/
 **tests.py**: Archivo que contiene los casos de prueba de nuestro sitio.
 
 **views.py**: Script que contiene todas las funciones asociadas con las vistas de nuestra aplicación.
+
+[Volver al índice](#indice)
 
 <div id='paso9' />
 
@@ -323,6 +341,8 @@ urlpatterns = [
     path('app1/', include('App1.urls')), # Agregamos las urls de App1 a la url raíz app1/
 ]
 ```
+
+[Volver al índice](#indice)
 
 <div id='paso10' />
 
@@ -410,6 +430,7 @@ A continuación, modificaremos nuestra plantilla para recibir los parámetros en
 
 ```
 
+[Volver al índice](#indice)
 
 <div id='paso11' />
 
@@ -457,6 +478,8 @@ Modificaremos nuestra plantilla para agregar el estilo creado
   </body>
 </html>
 ```
+
+[Volver al índice](#indice)
 
 <div id='paso12' />
 
@@ -553,6 +576,8 @@ urlpatterns = [
 ]
 ```
 
+[Volver al índice](#indice)
+
 <div id='paso13' />
 
 ## 13. Redireccionamiento
@@ -589,8 +614,12 @@ def form(request): # Vista para formulario que genera solicitudes POST
     return render(request,"form.html")
 ```
 
+[Volver al índice](#indice)
+
 <div id='paso14' />
 
 ## 14. Sesiones
 
 Las variables de sesión son aquellas que permiten almacenar estados asociados a la conexión HTTP realizada sobre nuestro servidor.
+
+[Volver al índice](#indice)
