@@ -22,7 +22,24 @@ La estructura de esta guía se presenta a continuación:
 12. [GET y POST request](#paso12)
 13. [Redireccionamiento](#paso13)
 14. [Sesiones](#paso14)
+15. [Django ORM](#paso15)
+    1. [Django con PostgreSQL](#paso15_1)
+    2. [Modelos](#paso15_2)
+    3. [Migraciones](#paso15_3)
+    4. [ORM](#paso15_4)
 
+I. [Anexo1: PostgreSQL](#A1)
+    1. [Configuración](#A1.1)
+    2. [Comandos básicos](#A1.2)
+    3. [Sentencias SQL básicas](#A1.3)
+        1. [Select](#A1.3.1)
+        2. [Insert](#A1.3.2)
+        3. [Update](#A1.3.3)
+        4. [Delete](#A1.3.4)
+        5. [Join](#A1.3.5)
+
+
+---
 
 <div id='paso1' />
 
@@ -30,35 +47,39 @@ La estructura de esta guía se presenta a continuación:
 
 En la carpeta donde se desee crear el nuevo entorno virtual
 
-```bash
+```console
 $ python -m venv DjangoVenv
 ```
 
 Esto creará un entorno virtual en la carpeta actual
 
-```bash
+```console
 $ ls
 DjangoVenv/
 ```
 
 Activación del entorno virtual
 
-```bash
+```console
 $ source DjangoVenv/bin/activate
 (DjangoVenv) $ 
 ```
 
 [Volver al índice](#indice)
 
+---
+
 <div id='paso2' />
 
 ## 2. Instalación de Django sobre entorno virtual
 
-```bash
+```console
 (DjangoVenv)$ pip install Django
 ```
 
 [Volver al índice](#indice)
+
+---
 
 <div id='paso3' />
 
@@ -66,13 +87,13 @@ $ source DjangoVenv/bin/activate
 
 En la carpeta donde se desee crear el nuevo proyecto
 
-```bash
+```console
 (DjangoVenv)$ django-admin startproject MyEnterprise
 ```
 
 Entrar a la carpeta del proyecto e iniciar projecto usando archivo *manage.py*
 
-```bash
+```console
 (DjangoVenv)$ cd MyEnterprise/
 (DjangoVenv)$ python manage.py runserver
 Watching for file changes with StatReloader
@@ -93,6 +114,8 @@ Ingresamos a la url http://127.0.0.1:8000/ indicada para verificar el correcto f
 ![](images/1-runserver.png)
 
 [Volver al índice](#indice)
+
+---
 
 <div id='paso4' />
 
@@ -131,13 +154,15 @@ MyEnterprise/
 
 [Volver al índice](#indice)
 
+---
+
 <div id='paso5' />
 
 ## 5. Migración inicial
 
 Django provee todos sus proyectos con algunas aplicaciones preinstaladas (ej. admin, auth, etc.). Estas aplicaciones, vienen con sus propios modelos, los cuales serán migrados a nuestra base de datos durante nuestra primera migración.
 
-```bash
+```console
 (DjangoVenv)$ python manage.py migrate
 Operations to perform:
   Apply all migrations: admin, auth, contenttypes, sessions
@@ -164,13 +189,15 @@ Running migrations:
 
 [Volver al índice](#indice)
 
+---
+
 <div id='paso6' />
 
 ## 6. Creación de vistas y enrutamiento
 
 Dentro de nuestro proyecto, en la carpeta *MyEnterprise/MyEnterprise/*, agregar el archivo *views.py*. Este definirá las vistas de nuestro proyecto.
 
-```bash
+```console
 (DjangoVenv)$ cd MyEnterprise/
 (DjangoVenv)$ touch views.py
 ```
@@ -205,13 +232,17 @@ urlpatterns = [
 
 Ejecutamos nuevamente nuestro servidor para verificar que la nueva vista ha sido agregada
 
-```bash
+```console
 (DjangoVenv)$ python manage.py runserver
 ```
 
 ![](images/2-view.png)
 
+**TODO**: Hacer enrutamiento con parámetros
+
 [Volver al índice](#indice)
+
+---
 
 <div id='paso7' />
 
@@ -219,7 +250,7 @@ Ejecutamos nuevamente nuestro servidor para verificar que la nueva vista ha sido
 
 Nuestro proyecto puede contar con una o más aplicaciones. Para crear una nueva aplicación, tenemos que ejecutar el script *manage.py* como se muestra a continuación
 
-```bash
+```console
 (DjangoVenv)$ python manage.py startapp App1
 ```
 
@@ -246,6 +277,8 @@ INSTALLED_APPS = [
 ```
 
 [Volver al índice](#indice)
+
+---
 
 <div id='paso8' />
 
@@ -290,6 +323,8 @@ MyEnterprise/
 
 [Volver al índice](#indice)
 
+---
+
 <div id='paso9' />
 
 ## 9. Vistas y enrutamiento en aplicaciones
@@ -307,7 +342,7 @@ def index(request):
 
 Luego, en la carpeta de nuestra aplicación *App1/*, crearemos un archivo *urls.py* y luego lo modificaremos para asociar la vista con su respectiva url *dentro de la aplicación*.
 
-```bash
+```console
 (DjangoVenv)$ cd App1/
 (DjangoVenv)$ touch urls.py
 ```
@@ -325,7 +360,7 @@ urlpatterns = [
 
 Luego, debemos agregar en nuestro proyecto las urls definidas dentro de nuestra aplicación. Para esto, modificaremos el archivo *urls.py* de nuestro proyecto.
 
-```bash
+```console
 (DjangoVenv)$ cd MyEnterprise/
 ```
 
@@ -344,13 +379,15 @@ urlpatterns = [
 
 [Volver al índice](#indice)
 
+---
+
 <div id='paso10' />
 
 ## 10. Plantillas y paso de datos
 
 Django permite utilizar plantillas .html creadas por el desarrollador al momento de renderizar la vista. Estas plantillas deben encontrarse dentro de una carpeta *templates/*. Crearemos esta carpeta dentro de nuestra aplicación con una primera plantilla html.
 
-```bash
+```console
 (DjangoVenv)$ cd App1/
 (DjangoVenv)$ mkdir templates/
 (DjangoVenv)$ touch templates/index.html
@@ -432,13 +469,15 @@ A continuación, modificaremos nuestra plantilla para recibir los parámetros en
 
 [Volver al índice](#indice)
 
+---
+
 <div id='paso11' />
 
 ## 11. Archivos estáticos
 
-Django permite agregar archivos estáticos (css, javascripts, imágenes, etc.) con una organización similar a las plantillas. Estos archivos deben encontrarse en una carpeta llamada *static/* dentro de nuestra aplicación. Dentro de esta carpeta *static/*, agregaremos las carpetas *css/*, *js/* e *images/* asociados a los archivos css, javascript e imágenes respectivament.
+Django permite agregar archivos estáticos (css, javascripts, imágenes, etc.) con una organización similar a las plantillas. Estos archivos deben encontrarse en una carpeta llamada *static/* dentro de nuestra aplicación. Dentro de esta carpeta *static/*, agregaremos las carpetas *css/*, *js/* e *images/* asociados a los archivos css, javascript e imágenes respectivamente.
 
-```bash
+```console
 (DjangoVenv)$ cd App1/
 (DjangoVenv)$ mkdir static/
 (DjangoVenv)$ mkdir static/css/
@@ -448,7 +487,7 @@ Django permite agregar archivos estáticos (css, javascripts, imágenes, etc.) c
 
 Crearemos un archivo de estilo en nuestra carpeta *static/css/*
 
-```bash
+```console
 (DjangoVenv)$ touch static/css/estilo.css
 ```
 
@@ -480,6 +519,8 @@ Modificaremos nuestra plantilla para agregar el estilo creado
 ```
 
 [Volver al índice](#indice)
+
+---
 
 <div id='paso12' />
 
@@ -578,6 +619,8 @@ urlpatterns = [
 
 [Volver al índice](#indice)
 
+---
+
 <div id='paso13' />
 
 ## 13. Redireccionamiento
@@ -616,10 +659,365 @@ def form(request): # Vista para formulario que genera solicitudes POST
 
 [Volver al índice](#indice)
 
+---
+
 <div id='paso14' />
 
 ## 14. Sesiones
 
-Las variables de sesión son aquellas que permiten almacenar estados asociados a la conexión HTTP realizada sobre nuestro servidor.
+Las variables de sesión son aquellas que permiten almacenar estados asociados a la conexión HTTP realizada sobre nuestro servidor. Las variables de sesión (aquellas que almacenarán este estado), se crean a partir de las solicitudes recibidas en cada vista a través del parámetro de entrada *request* definido para las funciones de manejo de vista.
+
+Crearemos una variable de sesión para verificar que las conexión siempre partan desde la ruta asociada a la vista *index*.
+
+```html
+<!--App1/templates/index.html-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bienvenido a App1</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/estilo.css' %}">
+  </head>
+  <body>
+    <h1>Bienvenido a App1: Una aplicación de My Enterprise</h1>
+    <p>Nombre: {{nombre}}</p>
+    <p>Posición del cargo {{pos_cargo}}</p>
+    <p>Amigos</p>
+    <ul>
+    {% for amigo in amigos %}
+        <li>{{amigo}}</li>
+    {% endfor %}
+    </ul>
+  </body>
+</html>
+```
+
+```html
+<!--App1/templates/form.html-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario POST</title>
+</head>
+<body>
+    <h1>Página con sesión de {{nombre}}</h1>
+    <form action="/app1/solicitudes/" method="post">
+        {% csrf_token %}
+        <p>Nombre:</p>
+        <input type='text' name='nombre'>
+        <p>Posición cargo:</p>
+        <input type='value' min=1 max=10 name='pos_cargo'>
+        <button type='submit'>Nuevo usuario</button>
+    </form>
+</body>
+</html>
+```
+
+```html
+<!--App1/templates/solicitudes.html-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitud App1</title>
+</head>
+<body>
+    <h1>Página con sesión de {{nombre}}</h1>
+    <h1>La solicitud recibida es de tipo {{solicitud}}</h1>
+</body>
+</html>
+```
+
+```python
+# App1/views.py
+from django.shortcuts import render, redirect
+
+# Create your views here.
+
+def index(request):
+    context = {
+        'nombre': 'Optimus Prime',
+        'pos_cargo': 1,
+        'amigos': ['Bumblebee', 'Ratchet', 'Ironhide']
+    }
+    request.session['nombre'] = context['nombre'] # Se crea la variable de sesión con un nombre
+    return render(request, 'index.html', context)
+
+def solicitudes(request): 
+    # Si variable de sesión no fue creada, se redirige tráfico a index de app1
+    if request.session.get("nombre") == None: 
+        return redirect("/app1")
+    context = {
+        'nombre': request.session.get("nombre")
+    }
+    if request.method == "GET":
+        return redirect("/app1") 
+    elif request.method == "POST":
+        print("Se detectó una solicitud POST")
+        print(request.POST)
+        context['solicitud'] = 'POST'
+    return render(request,"solicitudes.html", context)
+
+def form(request):
+    # Si variable de sesión no fue creada, se redirige tráfico a index de app1
+    if request.session.get("nombre") == None:
+        return redirect("/app1")
+    context = {
+        'nombre': request.session.get("nombre")
+    }
+    return render(request,"form.html", context)
+```
+
 
 [Volver al índice](#indice)
+
+---
+
+<div id='paso15' />
+
+## 15. Django ORM
+
+<div id='paso15_1' />
+
+### 15.1 Django con PostgreSQL
+
+
+* Instalación biblioteca Python
+
+Se debe instalar la biblioteca Python *psycopg2* para la conexión con Postgre
+
+```console
+(DjangoVenv)$ pip install psycopg2
+```
+
+Luego, se debe cambiar la configuración de la base de datos que usará Django en el archivo *settings.py* de nuestro proyecto (puede revisar la documentación de Django para múltiples bases de datos https://docs.djangoproject.com/en/3.2/topics/db/multi-db/).
+
+```python
+# MyEnterprise/settings.py
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'myenterprise', # nombre de la base de datos, se creará en el servidor de Postgres a continuación
+        'USER': 'postgres', # postgres para macOS o 'USER': 'postgres', para Windows
+        'PASSWORD': '123456', # contraseña a la que la cambió al instalar Postgres
+        'HOST': '127.0.0.1', # dirección IP localhost
+        'PORT': '5432', # puerto del servidor postgres predeterminado
+    }
+}
+```
+
+Finalmente, con las configuraciones hechas, se deben cargar las migraciones iniciales usando *manage.py*.
+
+```python
+(DjangoVenv)$ python manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, contenttypes, sessions
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying auth.0001_initial... OK
+  Applying admin.0001_initial... OK
+  Applying admin.0002_logentry_remove_auto_add... OK
+  Applying admin.0003_logentry_add_action_flag_choices... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK
+  Applying auth.0009_alter_user_last_name_max_length... OK
+  Applying auth.0010_alter_group_name_max_length... OK
+  Applying auth.0011_update_proxy_permissions... OK
+  Applying auth.0012_alter_user_first_name_max_length... OK
+  Applying sessions.0001_initial... OK
+```
+
+<div id='paso15_2' />
+
+### 15.2 Modelos
+
+Crearemos un modelo que será cargado en nuestra base de datos. Cada modelo está representado por una **clase Python** en nuestro archivo *models.py* dentro de nuestra aplicación. Para que Django la identifique como un modelo de base de datos, se le debe indicar que hereda de la clase *models.Model*
+
+```python
+# App1/models.py
+from django.db import models
+
+class Cliente(models.Model):
+    # id se crea automáticamente
+    nombre = models.CharField(max_length=50)
+    run = models.IntegerField()
+    dv = models.IntegerField()
+
+class Cuentas(models.Model):
+    idCliente = models.ForeignKey(Cliente, on_delete=models.CASCADE) # Llave foránea a clientes
+    n_cuenta = models.IntegerField()
+    saldo = models.FloatField()
+
+```
+
+<div id='paso15_3' />
+
+### 15.3 Migraciones
+
+Una vez creado el modelo, este debe ser cargado a la base de datos. Este proceso se realiza con *migraciones*.
+
+```console
+(DjangoVenv)$ python manage.py makemigrations
+(DjangoVenv)$ python manage.py migrate
+```
+
+Mientras que **makemigrations** revisa las actualizaciones que se han hecho sobre el modelo, **migrate** aplica los cambios sobre la base de datos.
+
+<div id='paso15_4' />
+
+### 15.4 ORM
+
+Un Object-Relational-Mapping (ORM) permite acceder a una base de datos, con sus datos y estructura, usando programación orientada a objetos. Cada objeto está asociado con un dato y cada método está asociado con una sentencia SQL (para ver más de sentencias SQL, revisar [Anexo1](#A1))
+
+Manipularemos la Base de Datos a través de la Django Shell. Si bien, es posible usar directamente esta terminal, utilizaremos la terminal Python con funcionalidades extendidas llamada *IPython*.
+
+* Instalación de *IPython*.
+
+```console
+(DjangoVenv)$ pip install ipython
+```
+
+* Ejecución de la Django Shell 
+
+```console
+(DjangoVenv)$ python manage.py shell
+Python 3.8.8 (default, Feb 24 2021, 21:46:12) 
+Type 'copyright', 'credits' or 'license' for more information
+IPython 7.22.0 -- An enhanced Interactive Python. Type '?' for help.
+
+In [1]: 
+```
+
+* Creación de datos
+
+```console
+In [1]: from App1.models import * # Se importan los modelos creados
+In [2]: cliente1 = Cliente.objects.create(nombre="Damián", run=11111111, dv=1) # Nuevo cliente
+In [3]: cuenta1_1 = Cuenta.objects.create(cliente=cliente1, 
+                    n_cuenta="153489", saldo=10000) # Creación de nueva cuenta
+In [4]: cuenta1_2 = Cuenta.objects.create(cliente=cliente1,
+                    n_cuenta="64895642", saldo=50000) # Cuenta adicional
+```
+
+Métodos ORM provistos en Django pueden ser revisados en la plataforma Coding Dojo y en la documentación de Django (https://docs.djangoproject.com/en/3.2/topics/db/models/)
+
+[Volver al índice](#indice)
+
+---
+
+<div id='A1' />
+
+## Anexo1: PostgreSQL
+
+<div id='A1.1' />
+
+### A1.1 Instalación
+
+```console
+(DjangoVenv)$ sudo apt install postgresql postgresql-contrib
+```
+
+(Revisar plataforma de Coding Dojo para otros sistemas operativos)
+
+<div id='A1.2' />
+
+### A1.2 Comandos de uso común 
+
+(Referencia: https://gist.github.com/Kartones/dd3ff5ec5ea238d4c546)
+
+Magic words:
+
+```bash
+psql -U postgres
+```
+
+Some interesting flags (to see all, use `-h` or `--help` depending on your psql version):
+- `-E`: will describe the underlaying queries of the `\` commands (cool for learning!)
+- `-l`: psql will list all databases and then exit (useful if the user you connect with doesn't has a default database, like at AWS RDS)
+
+Most `\d` commands support additional param of `__schema__.name__` and accept wildcards like `*.*`
+
+- `\?`: Show help (list of available commands with an explanation)
+- `\q`: Quit/Exit
+- `\c __database__`: Connect to a database
+- `\d __table__`: Show table definition (columns, etc.) including triggers
+- `\d+ __table__`: More detailed table definition including description and physical disk size
+- `\l`: List databases
+- `\dy`: List events
+- `\df`: List functions
+- `\di`: List indexes
+- `\dn`: List schemas
+- `\dt *.*`: List tables from all schemas (if `*.*` is omitted will only show SEARCH_PATH ones)
+- `\dT+`: List all data types
+- `\dv`: List views
+- `\dx`: List all extensions installed
+- `\df+ __function__` : Show function SQL code. 
+- `\x`: Pretty-format query results instead of the not-so-useful ASCII tables
+- `\copy (SELECT * FROM __table_name__) TO 'file_path_and_name.csv' WITH CSV`: Export a table as CSV
+- `\des+`: List all foreign servers
+- `\dE[S+]`: List all foreign tables
+- `\! __bash_command__`: execute `__bash_command__` (e.g. `\! ls`)
+
+User Related:
+- `\du`: List users
+- `\du __username__`: List a username if present.
+- `create role __test1__`: Create a role with an existing username.
+- `create role __test2__ noinherit login password __passsword__;`: Create a role with username and password.
+- `set role __test__;`: Change role for current session to `__test__`.
+- `grant __test2__ to __test1__;`: Allow `__test1__` to set its role as `__test2__`.
+- `\deu+`: List all user mapping on server
+
+<div id='A1.3' />
+
+### A1.3 Roles
+
+PostgreSQL trabaja con roles. Durante la instalación, se creó automáticamente el rol *postgres*.
+
+```console
+(DjangoVenv)$ sudo --login --user=postgres
+postgres@localhost$ 
+```
+
+<div id='A1.4' />
+
+### A1.4 Creación de Base de datos
+
+```console
+postgres@localhost$ psql
+Type "help" for help.
+
+postgres=# create database myenterprise;
+CREATE DATABASE
+postgres=# \l
+                                   List of databases
+     Name     |  Owner   | Encoding |   Collate   |    Ctype    |   Access privileges   
+--------------+----------+----------+-------------+-------------+-----------------------
+ myenterprise | postgres | UTF8     | es_CL.UTF-8 | es_CL.UTF-8 | 
+ postgres     | postgres | UTF8     | es_CL.UTF-8 | es_CL.UTF-8 | 
+ template0    | postgres | UTF8     | es_CL.UTF-8 | es_CL.UTF-8 | =c/postgres          +
+              |          |          |             |             | postgres=CTc/postgres
+ template1    | postgres | UTF8     | es_CL.UTF-8 | es_CL.UTF-8 | =c/postgres          +
+              |          |          |             |             | postgres=CTc/postgres
+(4 rows)
+postgres=# \c myenterprise
+You are now connected to database "myenterprise" as user "postgres".
+```
+
+[Volver al índice](#indice)
+
+---
