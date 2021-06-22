@@ -28,16 +28,18 @@ La estructura de esta guía se presenta a continuación:
     3. [Migraciones](#paso15_3)
     4. [ORM](#paso15_4)
 
-I. [Anexo1: PostgreSQL](#A1)
-    1. [Configuración](#A1.1)
-    2. [Comandos básicos](#A1.2)
-    3. [Sentencias SQL básicas](#A1.3)
-        1. [Select](#A1.3.1)
-        2. [Insert](#A1.3.2)
-        3. [Update](#A1.3.3)
-        4. [Delete](#A1.3.4)
-        5. [Join](#A1.3.5)
-
+**Anexos**
+1. [Anexo1: PostgreSQL](#A1)
+    1. [Instalación](#A1.1)
+    2. [Comandos de uso común](#A1.2)
+    3. [Roles](#A1.3)
+    4. [Creación de Bases de datos](#A1.4)
+    4. [Sentencias básicas SQL](#A1.5)
+        1. [Insert](#A1.5.1)
+        2. [Select](#A1.5.2)
+        3. [Update](#A1.5.3)
+        4. [Delete](#A1.5.4)
+        5. [Join](#A1.5.5)
 
 ---
 
@@ -596,7 +598,7 @@ Para cada una de estas vistas, crearemos una plantilla
         <p>Nombre:</p>
         <input type='text' name='nombre'>
         <p>Posición cargo:</p>
-        <input type='value' min=1 max=10 name='pos_cargo'>
+        <input type='number' min=1 max=10 name='pos_cargo'>
         <button type='submit'>Nuevo usuario</button>
     </form>
 </body>
@@ -712,7 +714,7 @@ Crearemos una variable de sesión para verificar que las conexión siempre parta
         <p>Nombre:</p>
         <input type='text' name='nombre'>
         <p>Posición cargo:</p>
-        <input type='value' min=1 max=10 name='pos_cargo'>
+        <input type='number' min=1 max=10 name='pos_cargo'>
         <button type='submit'>Nuevo usuario</button>
     </form>
 </body>
@@ -916,6 +918,8 @@ In [4]: cuenta1_2 = Cuenta.objects.create(cliente=cliente1,
 
 Métodos ORM provistos en Django pueden ser revisados en la plataforma Coding Dojo y en la documentación de Django (https://docs.djangoproject.com/en/3.2/topics/db/models/)
 
+* Ejemplo 
+
 [Volver al índice](#indice)
 
 ---
@@ -1016,6 +1020,126 @@ postgres=# \l
 (4 rows)
 postgres=# \c myenterprise
 You are now connected to database "myenterprise" as user "postgres".
+myenterprise=#
+```
+
+<div id='A1.5' />
+
+### A1.5 Sentencias básicas SQL
+
+Referencia: https://www.postgresqltutorial.com/
+
+**Ojo:** PostgreSQL utiliza comillas dobles (") para identificadores de sistema y comillas simples (') para textos.
+
+<div id='A1.5.1' />
+
+#### **A1.5.1 Insert**
+
+```sql
+insert into nombre_tabla (columna1, columna2, columna3) values (valor1, valor2, valor3);
+```
+
+Ejemplo: 
+
+```console
+myenterprise=# insert into "App1_cliente" (nombre, run, dv) values ('Patricio', 11111111, 1), ('Juan', 2222222, 2);
+INSERT 0 2
+```
+
+<div id='A1.5.2' />
+
+#### **A1.5.2 Select**
+
+```sql
+select columna1, columna2 from nombre_tabla where condición;
+```
+
+Ejemplo: 
+
+```console
+myenterprise=# select run from "App1_cliente" where nombre='Patricio';
+   run    
+----------
+ 11111111
+(1 row)
+
+```
+
+<div id='A1.5.3' />
+
+#### **A1.5.3 Update**
+
+```sql
+update nombre_tabla set columna1=valor1 and columna2=valor2 where columna3=valor3;
+
+```
+
+Ejemplo: 
+
+```console
+myenterprise=# update "App1_cliente" set nombre='Patricio Olivares' where run=11111111;
+UPDATE 1
+myenterprise=# select * from "App1_cliente";
+ id |      nombre       |   run    | dv 
+----+-------------------+----------+----
+  2 | Juan              |  2222222 |  2
+  1 | Patricio Olivares | 11111111 |  1
+(2 rows)
+```
+
+<div id='A1.5.4' />
+
+#### **A1.5.4 Delete**
+
+```sql
+delete from nombre_tabla where condicion;
+
+```
+
+Ejemplo: 
+
+```console
+myenterprise=# delete from "App1_cliente" where run=11111111;
+DELETE 1
+myenterprise=# select * from "App1_cliente";
+ id | nombre |   run   | dv 
+----+--------+---------+----
+  2 | Juan   | 2222222 |  2
+(1 row)
+```
+
+<div id='A1.5.5' />
+
+#### **A1.5.5 Join**
+
+Join permite combinar datos entre tablas que tengan una o más columnas en común. El Join puede ser de tipo
+
+1. **Inner Join:** Devuelve los datos que se encuentren en ambas columnas (intersección)
+2. **Left Join:** Agrega a la tabla de la izquierda la información contenida en la tabla derecha.
+3. **Right Join:** Agrega a la tabla de la detecha la información contenida en la tabla izquierda.
+
+Ejemplo:
+
+```console
+myenterprise=# insert into "App1_cliente" (nombre, run, dv) values ('Alfonso', 33333333, 3), ('Constanza', 44444444, 4);
+INSERT 0 2
+myenterprise=# insert into "App1_cuenta" (n_cuenta, saldo, cliente_id) values (1, 10000, 2), (2, 10000, 2), (3, 50000, 3);
+INSERT 0 3
+myenterprise=# select nombre, run, n_cuenta, saldo from "App1_cliente" join "App1_cuenta" on "App1_cliente".id=cliente_id;
+ nombre  |   run    | n_cuenta | saldo 
+---------+----------+----------+-------
+ Juan    |  2222222 |        1 | 10000
+ Juan    |  2222222 |        2 | 10000
+ Alfonso | 33333333 |        3 | 50000
+(3 rows)
+myenterprise=# select nombre, run, n_cuenta, saldo from "App1_cliente" left join "App1_cuenta" on "App1_cliente".id=cliente_id;
+  nombre   |   run    | n_cuenta | saldo 
+-----------+----------+----------+-------
+ Juan      |  2222222 |        1 | 10000
+ Juan      |  2222222 |        2 | 10000
+ Alfonso   | 33333333 |        3 | 50000
+ Constanza | 44444444 |          |      
+(4 rows)
 ```
 
 [Volver al índice](#indice)
