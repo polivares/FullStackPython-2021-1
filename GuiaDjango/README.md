@@ -760,8 +760,6 @@ def solicitudes(request):
     context = {
         'nombre': request.session.get("nombre")
     }
-    if request.method == "GET":
-        return redirect("/app1") 
     elif request.method == "POST":
         print("Se detectó una solicitud POST")
         print(request.POST)
@@ -896,7 +894,7 @@ Manipularemos la Base de Datos a través de la Django Shell. Si bien, es posible
 
 * Ejecución de la Django Shell 
 
-```console
+```python
 (DjangoVenv)$ python manage.py shell
 Python 3.8.8 (default, Feb 24 2021, 21:46:12) 
 Type 'copyright', 'credits' or 'license' for more information
@@ -907,12 +905,12 @@ In [1]:
 
 * Creación de datos
 
-```console
+```python
 In [1]: from App1.models import * # Se importan los modelos creados
 In [2]: cliente1 = Cliente.objects.create(nombre="Damián", run=11111111, dv=1) # Nuevo cliente
-In [3]: cuenta1_1 = Cuenta.objects.create(cliente=cliente1, 
+In [3]: cuenta1_1 = Cuentas.objects.create(idCliente=cliente1, 
                     n_cuenta="153489", saldo=10000) # Creación de nueva cuenta
-In [4]: cuenta1_2 = Cuenta.objects.create(cliente=cliente1,
+In [4]: cuenta1_2 = Cuentas.objects.create(idCliente=cliente1,
                     n_cuenta="64895642", saldo=50000) # Cuenta adicional
 ```
 
