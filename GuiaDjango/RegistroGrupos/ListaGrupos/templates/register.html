@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/general.css' %}">
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+    <title>Registro de grupos</title>
+</head>
+<body>
+    <section>
+        <p>{{prueba}}</p>
+        <h1>Registro de grupos</h1>
+        <h3>Registro de grupo {{ id }}</h3>
+        <form name="register_group" action="/listagrupos/listado/" method="POST">
+            {% csrf_token %}
+            <input type="text" placeholder="Nombre integrante" name="integrante1">
+            <input type="text" placeholder="Nombre integrante" name="integrante2">
+            <input type="text" placeholder="Nombre integrante" name="integrante3">
+            <input type="text" placeholder="Título del proyecto" name="project_title">
+            <textarea name="project_description" placeholder="Descripción del proyecto"></textarea>
+            <button type="submit">Registrar grupo</button>
+        </form>
+        <a href="/listagrupos/listado/">Lista de grupos</a>
+    </section>
+
+</body>
+</html>
