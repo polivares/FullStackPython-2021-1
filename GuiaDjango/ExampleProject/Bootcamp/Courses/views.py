@@ -8,10 +8,10 @@ def index(request):
 
 
 def professor(request):
-    pass
+    return render(request, 'professor.html')
 
 def create_course(request):
-    pass
+    return render(request, 'create_course.html')
 
 def student(request):
     return render(request, 'student.html')
