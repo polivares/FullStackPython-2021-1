@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses administration</title>
+</head>
+<body>
+    <h1>Courses administration</h1>
+    <div>
+        <section>
+            <!--Sección de registro-->
+            <h2>Rgister</h2>
+            <form action="#">
+                {% csrf_token %}
+                <label>First Name</label>
+                <input type="text" placeholder="First Name">
+                <label>Last Name:</label>
+                <input type="text" placeholder="Last Name">
+                <label>Email:</label>
+                <input type="email" placeholder="Email">
+                <label>Password:</label>
+                <input type="password" placeholder="Password">
+                <label>Type of user</label>
+                <select>
+                    <option value="professor">Professor</option>
+                    <option value="student">Student</option>
+                </select>
+            </form>
+        </section>
+        <section>
+            <!--Sección de login-->
+            <h2>Login</h2>
+            <form action="#">
+                <label>Email</label>
+                <input type="email" placeholder="Email">
+                <label>Password</label>
+                <input type="password" placeholder="Password">
+            </form>
+        </section>
+    </div>
+    
+</body>
+</html>
