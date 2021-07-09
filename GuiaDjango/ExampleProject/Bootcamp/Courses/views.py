@@ -74,10 +74,7 @@ def login(request):
 def logout(request):
     if request.method == 'GET':
         # Borraremos las variables de sesión creadas (si es que están creadas)
-        if request.session.get('email') != None:
-            del request.session['email']
-        if request.session.get('type_user') != None:
-            del request.session['type_user']
+        request.session.flush()
 
     return redirect('/')
 
