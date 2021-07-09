@@ -1,4 +1,3 @@
-from _typeshed import FileDescriptor
 from django.db import models
 
 # Create your models here.
@@ -11,7 +10,10 @@ class Student(models.Model):
 
 
 class Professor(models.Model):
-    
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    email = models.EmailField(max_length=50)
+    password = models.CharField(max_length=50)
 
 class Course(models.Model):
     cod_course = models.CharField(max_length=10)

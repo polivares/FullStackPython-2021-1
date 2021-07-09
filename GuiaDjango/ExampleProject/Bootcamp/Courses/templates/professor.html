@@ -8,7 +8,8 @@
 </head>
 <body>
     <h1>Professor profile</h1>
-    <p>Full Name: </p>
+    <p>Full Name: {{name}}</p>
+    <a href='/logout/'>Logout</a>
 
     <section>
         <h2>Available courses</h2>
@@ -18,6 +19,16 @@
                 <th>Course Name</th>
                 <th>N° enrolled sutdents</th>
             </tr>
+            {% for curso in cursos %}
+            <tr>
+                <!--Acá va el código del curso-->
+                <td>{{curso.cod_course}}</td>
+                <!--Nombre del curso-->
+                <td>{{curso.course_name}}</td>
+                <!--Número de estudiantes inscritos vs el número máximo-->
+                <td>{{curso.max_students}}</td>
+            </tr>  
+            {% endfor %}
         </table>
     </section>
 </body>

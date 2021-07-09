@@ -11,35 +11,39 @@
     <div>
         <section>
             <!--Sección de registro-->
-            <h2>Rgister</h2>
-            <form action="#">
+            <h2>Register</h2>
+            <form action="register/" method="post">
                 {% csrf_token %}
                 <label>First Name</label>
-                <input type="text" placeholder="First Name">
+                <input type="text" placeholder="First Name" name="first_name">
                 <label>Last Name:</label>
-                <input type="text" placeholder="Last Name">
+                <input type="text" placeholder="Last Name" name="last_name">
                 <label>Email:</label>
-                <input type="email" placeholder="Email">
+                <input type="email" placeholder="Email" name="email">
                 <label>Password:</label>
-                <input type="password" placeholder="Password">
+                <input type="password" placeholder="Password" name="password">
                 <label>Type of user</label>
-                <select>
+                <select name="type_user">
                     <option value="professor">Professor</option>
                     <option value="student">Student</option>
                 </select>
+                <input type="submit" placeholder="Register">
             </form>
         </section>
         <section>
             <!--Sección de login-->
             <h2>Login</h2>
-            <form action="#">
+            <form action="login/" method="post">
+                {% csrf_token %}
                 <label>Email</label>
-                <input type="email" placeholder="Email">
+                <input type="email" placeholder="Email" name="email">
                 <label>Password</label>
-                <input type="password" placeholder="Password">
+                <input type="password" placeholder="Password" name="password">
+                <input type="submit" placeholder="Login">
             </form>
         </section>
     </div>
+
     
 </body>
 </html>
