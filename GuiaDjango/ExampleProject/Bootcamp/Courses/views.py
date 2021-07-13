@@ -100,6 +100,13 @@ def professor(request):
         return redirect('/')
 
 def create_course(request):
+    # Acá falta el manejo de sesiones!!! Cualquier puede crear cursos!! (esto es malo)
+    # El manejo de sesiones debe incluir dos cosas:
+    # 1) Que haya una sesión activa 
+    # 2) Que la sesión corresponda a un profesor (los estudiantes no pueden crear cursos!)
+    
+    # Opcional: el código de abajo se puede mejorar (reducir)
+
     # Vamos a identificar dos tipos de peticiones sobre la misma vista
     # Petición GET: La petición de tipo GET solo se llama cuando accedemos a la vista
     # Petición POST: La petición POST se llama solo cuando estamos creando un nuevo curso
