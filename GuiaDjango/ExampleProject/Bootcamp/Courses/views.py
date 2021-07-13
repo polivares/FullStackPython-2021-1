@@ -100,7 +100,24 @@ def professor(request):
         return redirect('/')
 
 def create_course(request):
-    return render(request, 'create_course.html')
+    # Vamos a identificar dos tipos de peticiones sobre la misma vista
+    # Petición GET: La petición de tipo GET solo se llama cuando accedemos a la vista
+    # Petición POST: La petición POST se llama solo cuando estamos creando un nuevo curso
+    if request.method == 'GET':
+        # Solo mostramos la página
+        return render(request, 'create_course.html')
+    elif request.method == 'POST':
+        # Agregamos registro a la tabla de cursos en la BD
+        cod_course = request.POST["cod_course"]
+        course_name = request.POST["course_name"]
+        max_students = request.POST["max_students"]
+        Course.objects.create(cod_course=cod_course,
+                             course_name=course_name,
+                             max_students=max_students)
+        # Y una vez agregado el registro, ya podemos mostrar la página renderizada de la
+        # vista correspondiente
+        return render(request, 'create_course.html')
+
 
 def student(request):
     return render(request, 'student.html')

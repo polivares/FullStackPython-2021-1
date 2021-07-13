@@ -10,12 +10,16 @@
     <h1>Professor profile: New course</h1>
     <p>Full Name: </p>
     <section>
-        <label>Course code</label>
-        <input type="text" placeholder="Course code">
-        <label>Course Name</label>
-        <input type="text" placeholder="Course Name">
-        <label>Max N° Students</label>
-        <input type="number" placeholder="Max N° students">
+        <form action="/create_course/" method="post">
+            {% csrf_token %}
+            <label>Course code</label>
+            <input type="text" placeholder="Course code" name="cod_course">
+            <label>Course Name</label>
+            <input type="text" placeholder="Course Name" name="course_name">
+            <label>Max N° Students</label>
+            <input type="number" placeholder="Max N° students" name="max_students">
+            <input type="submit">
+        </form>
     </section>
 </body>
 </html>
