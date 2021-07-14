@@ -8,7 +8,8 @@
 </head>
 <body>
     <h1>Professor profile: New course</h1>
-    <p>Full Name: </p>
+    <p>Full Name: {{name}} </p>
+    <a href='/logout/'>Logout</a>
     <section>
         <form action="/create_course/" method="post">
             {% csrf_token %}
@@ -21,6 +22,7 @@
             <input type="submit">
         </form>
     </section>
-    <!--Agregar algún enlace para volver al perfil de professor-->
+    <!--Agregar algún enlace para volver al perfil de profesor-->
+    <a href='/professor/'>Professor profile</a>
 </body>
 </html>

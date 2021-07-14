@@ -100,32 +100,70 @@ def professor(request):
         return redirect('/')
 
 def create_course(request):
-    # Acá falta el manejo de sesiones!!! Cualquier puede crear cursos!! (esto es malo)
-    # El manejo de sesiones debe incluir dos cosas:
-    # 1) Que haya una sesión activa 
-    # 2) Que la sesión corresponda a un profesor (los estudiantes no pueden crear cursos!)
-    
-    # Opcional: el código de abajo se puede mejorar (reducir)
-
-    # Vamos a identificar dos tipos de peticiones sobre la misma vista
-    # Petición GET: La petición de tipo GET solo se llama cuando accedemos a la vista
-    # Petición POST: La petición POST se llama solo cuando estamos creando un nuevo curso
-    if request.method == 'GET':
-        # Solo mostramos la página
-        return render(request, 'create_course.html')
-    elif request.method == 'POST':
-        # Agregamos registro a la tabla de cursos en la BD
-        cod_course = request.POST["cod_course"]
-        course_name = request.POST["course_name"]
-        max_students = request.POST["max_students"]
-        Course.objects.create(cod_course=cod_course,
-                             course_name=course_name,
-                             max_students=max_students)
+    # Utilizar la variable de sesión type_user (que creamos anteriormente en la vista login), tiene
+    # doble funcionalidad:
+    # 1) Verificar que una sesión existe. Cada vez que se crea una variable de sesión es porque se ha
+    #    creado una sesión. Ojo, en la primera parte no se usa request.session['type_user], porque esta
+    #    notación da error si no existe la variable
+    # 2) Una vez verificada la existencia de la variable de sesión type_user, preguntaremos por el 
+    # tipo de usuario almacenado en esta variable
+    if request.session.get('type_user') != None and request.session['type_user'] ==  "professor":
+        # Vamos a identificar dos tipos de peticiones sobre la misma vista
+        # Petición GET: La petición de tipo GET solo se llama cuando accedemos a la vista
+        # Petición POST: La petición POST se llama solo cuando estamos creando un nuevo curso
+        if request.method == 'POST':
+            # Agregamos registro a la tabla de cursos en la BD
+            cod_course = request.POST["cod_course"]
+            course_name = request.POST["course_name"]
+            max_students = request.POST["max_students"]
+            Course.objects.create(cod_course=cod_course,
+                                course_name=course_name,
+                                max_students=max_students)
+        # Creación del contexto. Solo necesitamos el nombre del profesor, por lo que solo se realiza esa
+        # consulta
+        email = request.session['email']
+        prof = Professor.objects.get(email=email)
+        context = {
+            'name': f'{prof.first_name} {prof.last_name}',
+        }
+        
         # Y una vez agregado el registro, ya podemos mostrar la página renderizada de la
         # vista correspondiente
-        return render(request, 'create_course.html')
+        return render(request, 'create_course.html', context=context)
+    # En caso de no cumplirse las condiciones de sesión, enviar a la página de inicio
+    else:
+        return redirect('/')
 
 
 def student(request):
+    # La vista de estudiante está encargada de dos tareas:
+    # 1) Mostrar el listado de cursos en los cuales está inscrito un cierto estudiante
+    # 2) Permitir, dentro de la lista de cursos disponibles, que un usuario se pueda inscribir 
+    #    en un curso  
+    
+    email = request.session["email"]
+    # En este punto tenemos la información del estudiante que ingreso a nuestra página
+    student = Student.objects.get(email=email)
+    # Ahora, nos falta saber en qué cursos está inscrito nuestro estudiante...
+    # Podríamos consultar directamente en la BD... pero el ORM ya nos ayuda en esta tarea!!!
+    
+    # Creación de variable de contexto
+    context = {
+        'cursos': [],
+    }
+
+    # ACÁ TENGO LA INFORMACIÓN DE LOS CURSOS EN LOS CUALES ESTÁ INSCRITO EL ESTUDIANTE
+    cursos = student.courses.all()
+    # Obtenemos el número de cursos a los cuales el estudiante está inscrito
+    n_cursos = len(cursos)
+    for curso in cursos:
+        # Obtendremos la lista de estudiantes de ese curso y calculamos cuántos hay
+        n_students = len(curso.students.all())
+        context['cursos'].append([curso.cod_course, curso.course_name, 
+                                     n_students, curso.max_students])
+                                    
+    print(context)
+
+
     return render(request, 'student.html')
 
