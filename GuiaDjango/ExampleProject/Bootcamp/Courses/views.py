@@ -136,6 +136,7 @@ def create_course(request):
 
 
 def student(request):
+        
     # La vista de estudiante está encargada de dos tareas:
     # 1) Mostrar el listado de cursos en los cuales está inscrito un cierto estudiante
     # 2) Permitir, dentro de la lista de cursos disponibles, que un usuario se pueda inscribir 
@@ -144,6 +145,13 @@ def student(request):
     email = request.session["email"]
     # En este punto tenemos la información del estudiante que ingreso a nuestra página
     student = Student.objects.get(email=email)
+
+    if request.method == "POST":
+        # Lo que se debe hacer es agregar un registro de un estudiante a un curso
+        curso = Course.objects.get(cod_course=request.POST["cod_course"])
+        curso.students.add(student)
+
+
     # Ahora, nos falta saber en qué cursos está inscrito nuestro estudiante...
     # Podríamos consultar directamente en la BD... pero el ORM ya nos ayuda en esta tarea!!!
     
@@ -166,6 +174,7 @@ def student(request):
     cursos = student.courses.all()
     # Obtenemos el número de cursos a los cuales el estudiante está inscrito
     n_cursos = len(cursos)
+    enrrolled_courses = []
     for curso in cursos:
         # Obtendremos la lista de estudiantes de ese curso y calculamos cuántos hay
         n_students = len(curso.students.all())
@@ -173,9 +182,11 @@ def student(request):
                                   'course_name': curso.course_name,
                                   'n_students': n_students,
                                   'max_students': curso.max_students})
-        #context['cursos'].append([curso.cod_course, curso.course_name, 
-        #                             n_students, curso.max_students])
                                     
+    # Crearemos la lista de cursos en los cuales el estudiante no está inscrito
+    available_courses = Course.objects.exclude(students=student)
+    context["available_courses"] = available_courses
+    print(available_courses)
 
 
     return render(request, 'student.html', context=context)

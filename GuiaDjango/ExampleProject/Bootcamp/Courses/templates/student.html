@@ -29,6 +29,8 @@
         </table>
     </section>
 
+    
+    
     <section>
         <h2>Available courses</h2>
         <table>
@@ -38,6 +40,18 @@
                 <th>N° enrolled students</th>
                 <th>Enroll</th>
             </tr>
+            {% for curso in available_courses %}
+            <tr>
+                <form action="/student/" method="post" >
+                    {% csrf_token %}
+                    <td>{{curso.cod_course}}</td>
+                    <td>{{curso.course_name}}</td>
+                    <td>{{curso.students.count}}</td>
+                    <input type="hidden" value="{{curso.cod_course}}" name="cod_course">    
+                    <td><input type="submit"></td>
+                </form>
+            </tr>
+            {% endfor %}
         </table>
         <!--El resto de la tabla se llena con jinja-->
     </section>
