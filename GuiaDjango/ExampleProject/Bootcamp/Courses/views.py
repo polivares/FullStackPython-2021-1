@@ -149,8 +149,18 @@ def student(request):
     
     # Creación de variable de contexto
     context = {
-        'cursos': [],
+        'cursos': [], # En cada posición de esta lista inicialmente vacía, irá la información de cada curso (como una lista)
     }
+
+    ''' Ejemplo de la variable de contexto con datos para esta vista. Supongamos que el estudiante está inscrito en tres cursos
+    context = {
+        'cursos': [[12246, "Primer curso", 10, 30],
+                   [12124, "Segundo curso", 25, 30],
+                   [54126, "Tercer curso", 5, 10]  ]
+
+    }
+
+    '''
 
     # ACÁ TENGO LA INFORMACIÓN DE LOS CURSOS EN LOS CUALES ESTÁ INSCRITO EL ESTUDIANTE
     cursos = student.courses.all()
@@ -159,11 +169,14 @@ def student(request):
     for curso in cursos:
         # Obtendremos la lista de estudiantes de ese curso y calculamos cuántos hay
         n_students = len(curso.students.all())
-        context['cursos'].append([curso.cod_course, curso.course_name, 
-                                     n_students, curso.max_students])
+        context['cursos'].append({'cod_course': curso.cod_course,
+                                  'course_name': curso.course_name,
+                                  'n_students': n_students,
+                                  'max_students': curso.max_students})
+        #context['cursos'].append([curso.cod_course, curso.course_name, 
+        #                             n_students, curso.max_students])
                                     
-    print(context)
 
 
-    return render(request, 'student.html')
+    return render(request, 'student.html', context=context)
 

@@ -18,7 +18,14 @@
                 <th>Course Name</th>
                 <th>N° enrolled students</th>
             </tr>
-            <!--El resto de la tabla se llena con jinja-->
+            <!--El resto de la tabla se llena con jinja con la información de los cursos ya inscritos-->
+            {% for curso in cursos %}
+            <tr>
+                <td>{{curso.cod_course}} </td>
+                <td>{{curso.course_name}} </td>
+                <td>{{curso.n_students}}/{{curso.max_students}} </td>
+            </tr>
+            {% endfor %}
         </table>
     </section>
 
