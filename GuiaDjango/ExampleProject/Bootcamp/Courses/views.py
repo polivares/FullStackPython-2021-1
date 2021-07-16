@@ -1,5 +1,6 @@
 from django.shortcuts import render, HttpResponse, redirect
 from Courses.models import *
+import bcrypt
 
 # Create your views here.
 
@@ -16,17 +17,19 @@ def register(request):
 
         if request.POST.get('type_user') == 'professor':
             # Hacemos registro en la tabla de profesor
+            password = bcrypt.hashpw(request.POST["password"].encode(), bcrypt.gensalt()).decode()
             prof = Professor.objects.create(first_name=request.POST["first_name"],
                                             last_name=request.POST["last_name"],
                                             email=request.POST["email"],
-                                            password=request.POST["password"])
+                                            password=password)
 
         elif request.POST.get('type_user') == 'student':
             # Hacemos registro en la tabla de estudiante
+            password = bcrypt.hashpw(request.POST["password"].encode(), bcrypt.gensalt()).decode()
             student = Student.objects.create(first_name=request.POST["first_name"],
                                             last_name=request.POST["last_name"],
                                             email=request.POST["email"],
-                                            password=request.POST["password"])
+                                            password=password)
                                             
         # Acá haremos los registros en la base de datos
         # y luego podemos hacer un redirect
@@ -44,7 +47,8 @@ def login(request):
         if len(prof) == 1:
             # En este punto, me aseguro de que existe un ÚNICO registro con el correo indicado en la tabla
             # de profesores. Por lo tanto, debemos verificar que la contraseña ingresada sea la correcta
-            if request.POST['password'] == prof[0].password:
+            #if request.POST['password'] == prof[0].password:
+            if bcrypt.checkpw(request.POST['password'].encode(), prof[0].password.encode()):
                 # Antes del redirect, crearemos una variable de sesión. En este caso, usaremos el email como 
                 # información a almacenar en una variable de sesión.
                 request.session['email'] = request.POST["email"]
@@ -53,12 +57,15 @@ def login(request):
                 request.session['type_user'] = "professor"
                 # Con el profesor ya verificado, lo redirigimos a la vista de profesor
                 return redirect('/professor/')
+            else:
+                return redirect('/')
         
         stud = Student.objects.filter(email=request.POST["email"])
         if len(stud) == 1:
             # En este punto, me aseguro de que existe un ÚNICO registro con el correo indicado en la tabla
             # de estudiantes. Por lo tanto, debemos verificar que la contraseña ingresada sea la correcta
-            if request.POST['password'] == stud[0].password:
+            #if request.POST['password'] == stud[0].password:
+            if bcrypt.checkpw(request.POST['password'].encode(), stud[0].password.encode()):
                 # Antes del redirect, crearemos una variable de sesión. En este caso, usaremos el email como 
                 # información a almacenar en una variable de sesión.
                 request.session['email'] = request.POST["email"]
@@ -67,6 +74,8 @@ def login(request):
                 request.session['type_user'] = "student"
                 # Con el estudiante ya verificado, lo redirigimos a la vista de estudiante
                 return redirect('/student/')
+        else:
+            return redirect('/')
 
     return redirect('/')
 
