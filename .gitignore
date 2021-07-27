@@ -2,6 +2,8 @@ envs/
 envs/*
 Grabaciones/
 Grabaciones/*
+Examenes/
+Examenes/*
 __pycache__/
 __pycache__/*
 *.sqlite3
