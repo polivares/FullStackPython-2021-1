@@ -7,17 +7,34 @@
     <title>TestApp</title>
 </head>
 <body>
-    <navbar>
+    <nav>
 
-    </navbar>
+    </nav>
     <section>
-        <h1></h1>
+        <h1>All Users</h1>
         <table>
             <th>
-                <td></td>
+                <td>ID</td>
+                <td>Name</td>
+                <td>email</td>
+                <td>user_level</td>
             </th>
             <!--El resto se llena dependiendo de los usuarios en la tabla.
             Se utilizará Jinja-->
+            {% for usuario in usuarios %}
+            <tr>
+                <td>{{usuario.id}}</td>
+                <td>{{usuario.nombre}} {{usuario.apellido}}</td>
+                <td>{{usuario.email}}</td>
+                <td> 
+                    {% if usuario.user_level == 9 %}
+                    admin
+                    {% elif usuario.user_level == 0 %}
+                    normal
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
         </table>
     </section>
 </body>

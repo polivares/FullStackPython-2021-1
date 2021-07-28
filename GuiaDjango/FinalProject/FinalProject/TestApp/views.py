@@ -14,9 +14,13 @@ def signin(request):
         passw = request.POST['password']
         usuario = Usuario.objects.get(email=email)
         if bcrypt.checkpw(passw.encode(), usuario.password.encode()):
+            # Almacenado como variables de sesión
+            request.session['email'] = email
+            request.session['user_level'] = usuario.user_level
+            request.session['name'] = f'{usuario.nombre} {usuario.apellido}'
             # Enviar al usuario a su página dependiendo del tipo de usuario
-            # Si es admin, enviarlo a su dashboard
-            if usuario.user_level == 9:
+            # Si es admin, enviarlo a su dashboard. user_level=9 => admin, user_level=0 => normal
+            if usuario.user_level == 9: 
                 return redirect('/dashboard/admin/')
             elif usuario.user_level == 0:
                 return redirect('/dashboard/')
@@ -46,7 +50,27 @@ def register(request):
     return render(request, 'register.html')
 
 def dashboard_admin(request):
-    return render(request, 'dashboard_admin.html')
+    # La verificación de sesión debería estar incluida en casi todas las vistas
+    if request.session.get('email') == None:
+        return redirect('/signin/')
+    
+    # Si el usuario es normal, no debería entrar a esta vista
+    if request.session.get('user_level') == 0:
+        return redirect('/dashboard/')
+    
+    # Si nos llega un POST a la misma página, quiere decir que alguien está intentando 
+    # borrar un usuario
+    if request.method == 'POST':
+        usuario = Usuario.objects.get(id=request.POST['id'])
+        usuario.delete()
+    # Consultar datos de usuarios en la base de datos
+    usuarios = Usuario.objects.all()
+    
+    context = {
+        'usuarios': usuarios,
+    }
+
+    return render(request, 'dashboard_admin.html', context=context)
 
 def users_new(request):
     return render(request, 'users_new.html')
@@ -58,7 +82,22 @@ def edit_user(request):
     return render(request, 'edit_user.html')
 
 def dashboard(request):
-    return render(request, 'dashboard.html')
+    # La verificación de sesión debería estar incluida en casi todas las vistas
+    if request.session.get('email') == None:
+        return redirect('/signin/')
+    
+    # Si el usuario es admin, no debería entrar a esta vista
+    if request.session.get('user_level') == 9:
+        return redirect('/dashboard/admin/')
+    
+    # Consultar datos de usuarios en la base de datos
+    usuarios = Usuario.objects.all()
+    
+    context = {
+        'usuarios': usuarios,
+    }
+
+    return render(request, 'dashboard.html', context=context)
 
 def users_edit(request):
     return render(request, 'users_edit.html')
