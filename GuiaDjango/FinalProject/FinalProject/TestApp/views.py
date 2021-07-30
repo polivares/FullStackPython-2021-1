@@ -49,6 +49,7 @@ def register(request):
             
     return render(request, 'register.html')
 
+
 def dashboard_admin(request):
     # La verificación de sesión debería estar incluida en casi todas las vistas
     if request.session.get('email') == None:
@@ -73,13 +74,64 @@ def dashboard_admin(request):
     return render(request, 'dashboard_admin.html', context=context)
 
 def users_new(request):
+    if request.method == 'POST':
+        if request.POST['password'] == request.POST['conf_password']:
+            email = request.POST['email']
+            nombre = request.POST['nombre']
+            apellido = request.POST['apellido']
+            passw = request.POST['password']
+            user_hash = bcrypt.hashpw(passw.encode(), bcrypt.gensalt()).decode()
+            user_level = 0 # Cero representa un usuario normal, 9 el administrador
+            # Si no hay ningún registro en la tabla, cambiamos el nivel de usuario a administrador
+            if len(Usuario.objects.all()) == 0:
+                user_level = 9
+            Usuario.objects.create(email=email,
+                                    nombre = nombre,
+                                    apellido = apellido,
+                                    password = user_hash,
+                                    user_level = user_level)
+        return redirect('/dashboard/admin')
     return render(request, 'users_new.html')
 
-def show_user(request):
-    return render(request, 'show_user.html')
+def show_user(request, user_id):
+    usuario_origen = Usuario.objects.get(email=request.session["email"]) # Este es el usuario que manda el mensaje (el que se logueo)
+    usuario_destino = Usuario.objects.get(id=user_id) # Este es el usuario que recibe el mensaje (el que pinché)
+    if request.method == 'POST':
+        # Quiere decir que estamos mandando algún mensaje y tenemos que manejarlo
+        if request.POST["type_form"] == "direct_post":
+            # Estamos enviando un mensaje al usuario destino
+            Mensaje.objects.create(mensaje=request.POST["post"],
+                                   usuario_origen=usuario_origen,
+                                   usuario_destino=usuario_destino)
+    context={
+        'usuario_origen': usuario_origen,
+        'usuario_destino': usuario_destino,
+        'mensajes_recibidos': Mensaje.objects.filter(usuario_destino=usuario_destino)
+    }
+    return render(request, 'show_user.html', context=context)
 
-def edit_user(request):
-    return render(request, 'edit_user.html')
+def edit_user(request, user_id):
+    if request.method == 'POST':
+        usuario = Usuario.objects.get(id=user_id)
+        if request.POST['type_form'] == 'update':
+            # Actualizo registro
+            usuario.email = request.POST['email']
+            usuario.nombre = request.POST['nombre']
+            usuario.apellido = request.POST['apellido']
+            usuario.user_level = request.POST['user_level']
+            usuario.save()
+        elif request.POST['type_form'] == 'pwd':
+            # Actualizo contraseña
+            if request.POST["password"] == request.POST["conf_password"]:
+                passw = request.POST["password"]
+                user_hash = bcrypt.hashpw(passw.encode(), bcrypt.gensalt()).decode()
+                usuario.password = user_hash
+                usuario.save()
+
+    context={
+        'user_id': user_id
+    }
+    return render(request, 'edit_user.html', context=context)
 
 def dashboard(request):
     # La verificación de sesión debería estar incluida en casi todas las vistas
@@ -100,4 +152,25 @@ def dashboard(request):
     return render(request, 'dashboard.html', context=context)
 
 def users_edit(request):
+    if request.session.get('email') == None:
+        return redirect('/signin/')
+    if request.method == 'POST':
+        usuario = Usuario.objects.get(email=request.session['email'])
+        if request.POST['type_form'] == 'update':
+            # Actualizo registro de usuario
+            usuario.email = request.POST['email']
+            usuario.nombre = request.POST['nombre']
+            usuario.apellido = request.POST['apellido']
+        elif request.POST['type_form'] == 'pwd':
+            # Actualizo contraseña
+            if request.POST["password"] == request.POST["conf_password"]:
+                passw = request.POST["password"]
+                user_hash = bcrypt.hashpw(passw.encode(), bcrypt.gensalt()).decode()
+                usuario.password = user_hash
+        elif request.POST["type_form"] == "desc":
+            # Actualización de descripción
+            usuario.descripcion = request.POST["description"]
+
+        usuario.save()
+
     return render(request, 'users_edit.html')

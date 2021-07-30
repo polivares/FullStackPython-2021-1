@@ -11,20 +11,42 @@
 
     </nav>
     <section>
+        <h1>Edit user {{ user_id }}</h1>
         <div>
-            <!-- El usuario a editar se llenará con Jinja-->
-            <h1></h1>
-            <button></button>
-        </div>
-        <div>
-            <form>
-                
+            <h3>Edit information</h3>
+            <form action='/users/edit/{{user_id}}/' method="post">
+                {% csrf_token %} 
+                <p>Email Addres</p>
+                <input type="email" name="email">
+                <p>First Name</p>
+                <input type="text" name="nombre">
+                <p>Last Name</p>
+                <input type="text" name="apellido">
+                <p>User level</p>
+                <select name="user_level">
+                    <option value="0">Normal</option>
+                    <option value="9">Admin</option>
+                  </select>
+                  <input type="hidden" name="type_form" value="update">
+                <input type="submit" value="Save">
             </form>
         </div>
         <div>
-            <form>
-                
+
+            <h3>Change Password</h3>
+            <form action='/users/edit/{{user_id}}/' method="post">
+                {% csrf_token %}
+                <p>Password</p>
+                <input type="password" name="password">
+                <p>Password Confirmation</p>
+                <input type="password" name="conf_password">
+                <input type="hidden" name="type_form" value="pwd">
+                <input type="submit" value="Update Password">
             </form>
+        </div>
+        <div>
+            <h3></h3>
+            <form></form>
         </div>
     </section>
 </body>

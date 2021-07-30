@@ -24,7 +24,7 @@
             {% for usuario in usuarios %}
             <tr>
                 <td>{{usuario.id}}</td>
-                <td>{{usuario.nombre}} {{usuario.apellido}}</td>
+                <td><a href="/users/show/{{usuario.id}}">{{usuario.nombre}} {{usuario.apellido}}</a></td>
                 <td>{{usuario.email}}</td>
                 <td> 
                     {% if usuario.user_level == 9 %}

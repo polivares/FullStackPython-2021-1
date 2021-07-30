@@ -13,7 +13,26 @@
     <section>
         <!-- Estas secciones depende del usuario que se consulte
         Por lo tanto, acá debería usarse Jinja-->
-        <h2></h2> 
+
+        <h2>Leave a message for {{usuario_destino.nombre}}</h2> 
+        <form action="/users/show/{{usuario_destino.id}}/" method="post">
+            {% csrf_token %}
+            <textarea name="post"></textarea>
+            <input type="hidden" name="type_form" value="direct_post">
+            <input type="submit" value="Post">
+        </form>
+        <div>
+            <ul>
+                <!-- Acá Jinja creará una lista con todos los mensajes enviados al usuario_destino-->
+                {% for post in mensajes_recibidos %}
+                    <li>{{post.mensaje}}</li>
+                {% endfor %}
+
+            </ul>
+        </div>
+
     </section>
+
+
 </body>
 </html>

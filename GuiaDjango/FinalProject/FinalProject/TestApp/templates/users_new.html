@@ -12,11 +12,22 @@
     </nav>
     <section>
         <div>
-            <h1></h1>
-            <button></button>
+            <h1>Add a new user</h1>
+            <a href="/dashboard/admin">Return to Dashboard</a>
         </div>
-        <form>
-
+        <form action='/users/new/' method="post">
+            {% csrf_token %} 
+            <p>Email Addres</p>
+            <input type="email" name="email">
+            <p>First Name</p>
+            <input type="text" name="nombre">
+            <p>Last Name</p>
+            <input type="text" name="apellido">
+            <p>Password</p>
+            <input type="password" name="password">
+            <p>Password Confirmation</p>
+            <input type="password" name="conf_password">
+            <input type="submit" value="Create">
         </form>
     </section>
 </body>

@@ -18,6 +18,7 @@ class Mensaje(models.Model):
     usuario_destino = models.ForeignKey(Usuario,
                                         related_name = "mensajes_recibidos",
                                         on_delete= models.CASCADE)
+    mensaje = models.TextField(blank=True)
 
 class Comentario(models.Model):
     mensaje = models.ForeignKey(Mensaje,
